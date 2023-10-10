@@ -10,7 +10,7 @@ index=$your-index-here$ sourcetype="o365\:management\:activity"</br>
 | eval mail_rule_changes=if(Operation="New-InboxRule" OR Operation="Set-InboxRule", "1", "0")</br>
 | eval delete_message_action_count=if(_raw="\*DeleteMessage\\", \\"Value\\": \\"True\*", "1", "0")</br>
 | stats sum(failed_login_attempts) as failed_login_attempts sum(successful_logins) as successful_logins sum(mail_rule_changes) as mail_rule_changes sum(delete_message_action_count) as delete_message_action_count dc(Operation) as count_of_unique_operations values(Operation) as user_operations values(src) as src values(Workload) as app values(action) as action count as count_of_all_user_activity by UserId</br>
-| search \[|search index=$your-index-here$ sourcetype="GraphSecurityAlert" NOT title="Suspicious inbox manipulation rule" earliest=-8h@h latest=-5m@m | rename 'userStates{}.userPrincipalName' as UserId | fields UserId\]</br>
+| search \[|search index=$your-index-here$ sourcetype="GraphSecurityAlert" NOT title="Suspicious inbox manipulation rule" earliest=-8h@h latest=-5m@m | rename "userStates{}.userPrincipalName" as UserId | fields UserId\]</br>
 | eval severity=if(delete_message_action_count=0, "2", "1")</br>
 | where mail_rule_changes>0
 
