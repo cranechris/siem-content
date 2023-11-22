@@ -40,7 +40,7 @@ by Authentication.src Authentication.action Authentication.user _time span=1s
 | lookup Dynamic_Thresholds.csv Authentication.src OUTPUTNEW overall_threshold, overall_std, failures_by_src, std_by_src
 >This is where we pull in the second dataset. For each unique Authentication.src/Asset there is a 30 day threshold, standard deviation, failure count, and overall standard deviation across all assets.
 
-| eval upperBound=(failures_by_src+(std_by_src*6)), OverallUpperBound=(overall_threshold+(overall_std*2))
+| eval upperBound=(failures_by_src+(std_by_src\*6)), OverallUpperBound=(overall_threshold+(overall_std\*2))
 >This is where you have the control to tune the math to your results. Normally I ould use quartiles, but the amount of authentication data found on corporate networks can be too large for search time completion and performance.
 >I will post a quartile example in this repo.
 
